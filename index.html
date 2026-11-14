@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>排楼梯 · 层高定了，做几级、每级多高、踏面多宽、楼板开多大的洞</title>
+<meta name="description" content="填层高、楼板厚、楼下能给楼梯的长度和楼板洞口能开多长，把几种级数并排比：每级多高、踏面多宽、步距合不合适、占多长、头顶会不会碰；给出放线表，以及想多做一级要把长度和洞口放到多少。">
+<style>
+  :root{
+    --bg:#f3f0ea; --card:#fff; --ink:#2a2620; --ink2:#5a544a; --mut:#8a8378; --line:#e3ddd2;
+    --wood:#9a6b3a; --wood2:#f4e9db; --no:#a33a2c; --no2:#f9e5e1; --pick:#2c5e7a; --pick2:#e2eef4;
+    --sh:0 1px 2px rgba(42,38,32,.06),0 6px 18px rgba(42,38,32,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:22px 16px 72px}
+  h1{font-size:30px;line-height:1.25;margin:0 0 6px}
+  .sub{color:var(--ink2);margin:0;font-size:15.5px}
+  .muted{color:var(--mut);font-size:13.5px}
+  .hide{display:none !important}
+  button{font:inherit;cursor:pointer}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:13.5px;color:var(--ink2)}
+  .chip[aria-pressed="true"]{background:var(--wood);border-color:var(--wood);color:#fff}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:16px;margin:14px 0;min-width:0}
+  .card h2{font-size:17px;margin:0 0 10px}
+  .card h2 small{font-weight:400;color:var(--mut);font-size:13px;margin-left:6px}
+  .f{min-width:0}
+  .f label{display:block;font-size:12.5px;color:var(--ink2);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .f input{width:100%;font:15px/1.4 ui-monospace,Menlo,monospace;padding:8px 9px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);min-width:0}
+  .f.bad input{border-color:var(--no);background:#fff4f1}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:10px}
+  .btn{background:var(--wood);border:1px solid var(--wood);color:#fff;border-radius:9px;padding:8px 13px;font-size:14px}
+  .btn.ghost{background:#fff;color:var(--wood)}
+  .btn.mini{padding:6px 10px;font-size:13px}
+  .bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .seg button{background:#fff;border:0;padding:6px 12px;font-size:13.5px;color:var(--ink2)}
+  .seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+  details.more{margin-top:10px} details.more summary{cursor:pointer;color:var(--ink2);font-size:14px}
+
+  .verdict{border-radius:12px;padding:14px 16px;margin:0 0 12px}
+  .verdict.good{background:var(--wood2);color:#4a3218}
+  .verdict.bad{background:var(--no2);color:#6e2216}
+  .verdict b.big{display:block;font-size:24px;line-height:1.3;overflow-wrap:anywhere}
+  .verdict p{margin:6px 0 0;font-size:15px;overflow-wrap:anywhere}
+
+  /* 对照表：几种级数并排，每种一列 */
+  .cmpw{overflow-x:auto;max-width:100%}
+  table.cmp{border-collapse:separate;border-spacing:0;font-size:14px;min-width:0;width:100%}
+  table.cmp th,table.cmp td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+  table.cmp th:first-child,table.cmp td:first-child{text-align:left;color:var(--ink2);font-weight:400;position:sticky;left:0;background:#fff}
+  table.cmp thead th{font-size:15px}
+  table.cmp td{font-family:ui-monospace,Menlo,monospace}
+  table.cmp .no{color:var(--no);background:#fffaf8}
+  table.cmp .sel{background:var(--pick2);color:var(--pick);font-weight:700}
+  table.cmp td.why{white-space:normal;font-family:inherit;font-size:12.5px;min-width:120px;max-width:200px}
+  .colbtn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px;font-size:13px;color:var(--ink)}
+  .colbtn[aria-pressed="true"]{background:var(--pick);border-color:var(--pick);color:#fff}
+  .colbtn:disabled{opacity:.5;cursor:not-allowed}
+
+  .sect{display:block;width:100%;height:auto;margin:4px 0 0;background:#fbf9f5;border-radius:10px}
+  .legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink2);margin-top:6px}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+
+  .box{border-radius:10px;padding:10px 12px;font-size:14.5px;margin:10px 0;overflow-wrap:anywhere}
+  .box.bad{background:var(--no2);color:#6e2216;border:1px solid #f0c7bd}
+  .box.warn{background:#fbf3df;color:#5f4a10;border:1px solid #eadcae}
+  .box ul{margin:4px 0 0;padding-left:20px}
+  .acts{display:grid;gap:8px}
+  .act{text-align:left;background:var(--pick2);border:1px solid #bcd5e2;color:#1f4256;border-radius:10px;padding:9px 12px;font-size:14px;overflow-wrap:anywhere}
+
+  .layw{overflow-x:auto;max-width:100%}
+  table.lay{border-collapse:collapse;font:13.5px ui-monospace,Menlo,monospace;width:100%}
+  table.lay th{font:600 12.5px -apple-system,"PingFang SC",sans-serif;color:var(--ink2);text-align:right;padding:5px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+  table.lay td{text-align:right;padding:4px 8px;border-bottom:1px dashed var(--line)}
+  table.lay tr.top td{color:var(--wood);font-weight:700}
+  @media (max-width:520px){ table.lay th,table.lay td{padding:4px 4px;font-size:12px} table.lay th{white-space:normal} table.cmp th,table.cmp td{padding:6px 7px;font-size:13px} }
+  .foot{margin-top:18px;font-size:13.5px;color:var(--mut)}
+  .foot li{margin:3px 0}
+  #saveTag{font-size:12.5px;color:var(--mut);font-weight:400}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>排楼梯</h1>
+    <p class="sub">层高定了，楼梯做几级？把几种级数并排摆出来：每级多高、踏面多宽、走起来顺不顺、楼下要让出多长、楼板要开多大的洞才不碰头。挑一种就出放线表；想多做一级，告诉你长度和洞口得放到多少。</p>
+    <div class="chips" id="presets"></div>
+    <p class="muted" id="presetNote"></p>
+  </header>
+
+  <section class="card" id="summary">
+    <h2>结论 <span id="saveTag"></span></h2>
+    <div id="errBox" class="box bad hide"></div>
+    <div id="okBody">
+      <div class="verdict" id="verdict"><b class="big" id="vBig"></b><p id="vTx"></p></div>
+      <div class="bar" style="margin:0 0 10px"><span class="muted">偏好</span>
+        <div class="seg" id="modeSeg"><button type="button" data-m="comfort" id="m_comfort">好走（级数多、步距居中）</button><button type="button" data-m="compact" id="m_compact">省地方（踏面取最窄）</button></div>
+      </div>
+      <svg class="sect" id="sect" viewBox="0 0 960 360" role="img" aria-label="楼梯侧面剖面"></svg>
+      <div class="legend"><span><i style="background:#9a6b3a"></i>踏步</span><span><i style="background:#c9c2b6"></i>上层楼板</span><span><i style="background:#e2eef4;outline:1px solid #2c5e7a"></i>要开的洞口</span><span><i style="background:#a33a2c"></i>净空线（前沿往上 <span id="lgHead"></span> mm）</span></div>
+      <div id="warnBox" class="box warn hide"></div>
+    </div>
+  </section>
+
+  <section class="card" id="cmpCard">
+    <h2>几种级数并排 <small>点列头上的按钮换用那一种</small></h2>
+    <div class="cmpw"><table class="cmp" id="cmp"></table></div>
+    <div id="actsBlock"><h2 style="margin-top:14px;font-size:15px">想换一种级数：点一下就把长度和洞口改进下面的输入</h2><div class="acts" id="acts"></div></div>
+  </section>
+
+  <section class="card" id="layCard">
+    <h2>放线表 <small id="laySub"></small></h2>
+    <div class="layw"><table class="lay" id="lay"></table></div>
+  </section>
+
+  <section class="card">
+    <h2>① 房子</h2>
+    <div class="grid">
+      <div class="f" id="f_H"><label for="H">层高（地面到地面）mm</label><input id="H" inputmode="numeric"></div>
+      <div class="f" id="f_slab"><label for="slab">上层楼板厚 mm</label><input id="slab" inputmode="numeric"></div>
+      <div class="f" id="f_head"><label for="head">头顶要留的净空 mm</label><input id="head" inputmode="numeric"></div>
+      <div class="f" id="f_L"><label for="L">楼下能给楼梯的长度 mm</label><input id="L" inputmode="numeric"></div>
+      <div class="f" id="f_open"><label for="open">洞口最长 mm（空=不限）</label><input id="open" inputmode="numeric"></div>
+      <div class="f" id="f_width"><label for="width">梯宽 mm</label><input id="width" inputmode="numeric"></div>
+    </div>
+    <details class="more"><summary>踏步的尺寸区间（按你自己的要求改）</summary>
+      <div class="grid" style="margin-top:8px">
+        <div class="f" id="f_rMin"><label for="rMin">每级最矮 mm</label><input id="rMin" inputmode="numeric"></div>
+        <div class="f" id="f_rMax"><label for="rMax">每级最高 mm</label><input id="rMax" inputmode="numeric"></div>
+        <div class="f" id="f_tMin"><label for="tMin">踏面最窄 mm</label><input id="tMin" inputmode="numeric"></div>
+        <div class="f" id="f_tMax"><label for="tMax">踏面最宽 mm</label><input id="tMax" inputmode="numeric"></div>
+        <div class="f" id="f_sMin"><label for="sMin">步距 2R+T 下限 mm</label><input id="sMin" inputmode="numeric"></div>
+        <div class="f" id="f_sMax"><label for="sMax">步距 2R+T 上限 mm</label><input id="sMax" inputmode="numeric"></div>
+      </div>
+      <p class="muted">R 是每级高，T 是踏面宽。默认区间是这个页面的设计选择，用来举例；当地规范、物业要求或设计师给的数字以它们为准，直接改这几格。</p>
+    </details>
+  </section>
+
+  <section class="card">
+    <div class="bar" style="margin:0">
+      <button type="button" class="btn mini" id="dlCsv">下载 CSV</button>
+      <button type="button" class="btn mini" id="dlMd">下载 MD</button>
+      <button type="button" class="btn mini" id="dlPng">下载方案卡 PNG</button>
+      <button type="button" class="btn mini ghost" id="dlJson">备份 JSON</button>
+      <button type="button" class="btn mini ghost" id="impJson">从 JSON 恢复</button>
+      <button type="button" class="btn mini ghost" id="reset">恢复默认</button>
+      <input type="file" id="impFile" accept="application/json,.json" class="hide">
+    </div>
+    <ul class="foot">
+      <li>默认的层高、楼板和空间尺寸都是虚构示例。</li>
+      <li>只算一部直跑楼梯（中间不带平台、不转弯），踏步等高等宽；头顶净空沿踏步前沿连线竖直往上量。这是几何估算，不是规范审查，也不算结构、扶手和材料。</li>
+      <li>放线表的高度取整到毫米，每级之间最多差 1 mm，累计正好等于层高。</li>
+      <li>输入只存在这台设备的浏览器里（localStorage），不上传。</li>
+    </ul>
+  </section>
+</div>
+<script src="./core.js"></script>
+<script src="./ui.js"></script>
+</body>
+</html>

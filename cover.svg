@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#f3f0ea"/>
+  <rect x="60" y="60" width="1080" height="1080" fill="#ffffff" stroke="#e3ddd2"/>
+  <rect x="60" y="60" width="1080" height="12" fill="#9a6b3a"/>
+  <text x="120" y="190" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="104" font-weight="700" fill="#2a2620">排楼梯</text>
+  <text x="120" y="252" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="32" fill="#8a8378">层高定了，做几级、踏面多宽、洞口开多大</text>
+  <rect x="112.8" y="330.0" width="160.97008323424495" height="14.89655172413793" fill="#c9c2b6"/>
+  <rect x="273.7" y="330.0" width="430.4230202140309" height="14.89655172413793" fill="#e2eef4" stroke="#2c5e7a"/>
+  <rect x="704.2" y="330.0" width="375.79999999999995" height="14.89655172413793" fill="#c9c2b6"/>
+  <path d="M150.0 690.0 L150.0 668.8 L184.6 668.8 L184.6 647.6 L219.3 647.6 L219.3 626.5 L253.9 626.5 L253.9 605.3 L288.5 605.3 L288.5 584.1 L323.2 584.1 L323.2 562.9 L357.8 562.9 L357.8 541.8 L392.4 541.8 L392.4 520.6 L427.1 520.6 L427.1 499.4 L461.7 499.4 L461.7 478.2 L496.3 478.2 L496.3 457.1 L531.0 457.1 L531.0 435.9 L565.6 435.9 L565.6 414.7 L600.2 414.7 L600.2 393.5 L634.9 393.5 L634.9 372.4 L669.5 372.4 L669.5 351.2 L704.2 351.2 L704.2 330.0 L704.2 690.0 Z" fill="#e9dccb" stroke="#9a6b3a" stroke-width="3"/>
+  <line x1="112.8" y1="690" x2="1080" y2="690" stroke="#5a544a" stroke-width="3"/>
+  <text x="488.9" y="316" text-anchor="middle" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="26" fill="#2c5e7a">洞口 3467</text>
+  <text x="120" y="790" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="50" font-weight="700" fill="#9a6b3a">17 级 · 每级 170.6 · 踏面 279</text>
+  <text x="120" y="870" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="34" fill="#2a2620">17 级</text>
+  <text x="420" y="870" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="34" fill="#5a544a">170.6 mm</text>
+  <text x="1080" y="870" text-anchor="end" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="32" fill="#2c5e7a">选用</text>
+  <text x="120" y="928" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="34" fill="#a33a2c">18 级</text>
+  <text x="420" y="928" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="34" fill="#5a544a">161.1 mm</text>
+  <text x="1080" y="928" text-anchor="end" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="32" fill="#a33a2c">长度不够、洞口不够</text>
+  <text x="120" y="986" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="34" fill="#a33a2c">19 级</text>
+  <text x="420" y="986" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="34" fill="#5a544a">152.6 mm</text>
+  <text x="1080" y="986" text-anchor="end" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="32" fill="#a33a2c">长度不够、洞口不够</text>
+  <text x="120" y="1100" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" fill="#8a8378">默认场景为虚构示例 · 层高 2900 mm · 直跑楼梯几何估算</text>
+</svg>
